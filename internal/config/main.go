@@ -6,15 +6,19 @@ import (
 	"os"
 )
 
+const FILENAME string = ".gatorconfig.json"
+
 type Config struct {
 	Db_url            string
 	Current_user_name string
 }
 
 func Read() Config {
-	home, _ := os.UserHomeDir()
-	fmt.Printf("%v\n", home)
-	configFile := home + "/.gatorconfig.json"
+	configFile, err := getConfigFilePath()
+	if err != nil {
+		fmt.Printf("Error fetching config file : %v\n", err)
+		return Config{}
+	}
 	file, err := os.Open(configFile)
 	if err != nil {
 		return Config{}
@@ -28,4 +32,35 @@ func Read() Config {
 		return c
 	}
 	return c
+}
+
+func (c *Config) SetUser(user_name string) {
+	c.Current_user_name = user_name
+	err := write(c)
+	if err != nil {
+		fmt.Printf("%v\n", err)
+	}
+
+}
+
+func write(c *Config) error {
+	path, err := getConfigFilePath()
+	if err != nil {
+		return err
+	}
+	data, err := json.MarshalIndent(c, "", "  ")
+	if err != nil {
+		return fmt.Errorf("Error MarshalIndent, %v\n", err)
+	}
+	os.WriteFile(path, data, 0644)
+	return nil
+}
+
+func getConfigFilePath() (string, error) {
+	home, err := os.UserHomeDir()
+	if err != nil {
+		return "", err
+	}
+	return home + "/" + FILENAME, nil
+
 }

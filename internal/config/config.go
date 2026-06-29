@@ -34,12 +34,16 @@ func Read() Config {
 	return c
 }
 
-func (c *Config) SetUser(user_name string) {
+func (c *Config) SetUser(user_name string) error {
+	if user_name == "" {
+		return fmt.Errorf("Error, username required")
+	}
 	c.Current_user_name = user_name
 	err := write(c)
 	if err != nil {
-		fmt.Printf("%v\n", err)
+		return fmt.Errorf("%v\n", err)
 	}
+	return nil
 
 }
 

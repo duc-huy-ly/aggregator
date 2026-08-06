@@ -1,6 +1,7 @@
 package commands
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/duc-huy-ly/aggregator/internal/config"
@@ -41,6 +42,12 @@ func HandlerLogin(s *State, cmd Command) error {
 	if len(cmd.Args) == 0 {
 		return fmt.Errorf("commands argument is empty\n")
 	}
+
+	_, err := s.Db.GetUser(context.Background(), cmd.Args[0])
+	if err != nil {
+		return fmt.Errorf("Something went wrong getting the user")
+	}
+	
 	fmt.Println("User has been set")
 	return s.MyConfig.SetUser(cmd.Args[0])
 }
@@ -55,6 +62,6 @@ func HandlerRegister(s *State, cmd Command) error {
 		return fmt.Errorf("Something went wrong in the user creation process")
 	}
 	s.MyConfig.Current_user_name = newUser.Name
-	return nil
+	return s.MyConfig.SetUser(newUser.Name)
 }
 

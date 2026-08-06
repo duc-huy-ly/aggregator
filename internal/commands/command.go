@@ -45,4 +45,16 @@ func HandlerLogin(s *State, cmd Command) error {
 	return s.MyConfig.SetUser(cmd.Args[0])
 }
 
+func HandlerRegister(s *State, cmd Command) error {
+	if len(cmd.Args) == 0 {
+		return  fmt.Errorf("No argument given")
+	}
+	fmt.Printf("Register function called for %v\n", cmd.Args[0])
+	newUser, err := s.MyConfig.RegisterUser(cmd.Args[0], s.Db)
+	if err != nil {
+		return fmt.Errorf("Something went wrong in the user creation process")
+	}
+	s.MyConfig.Current_user_name = newUser.Name
+	return nil
+}
 

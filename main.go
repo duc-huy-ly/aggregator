@@ -1,9 +1,11 @@
 package main
 
 import (
+	"context"
 	"database/sql"
 	"fmt"
 	"os"
+	"time"
 
 	"github.com/duc-huy-ly/aggregator/internal/commands"
 	"github.com/duc-huy-ly/aggregator/internal/config"
@@ -15,8 +17,16 @@ func main() {
 	fmt.Printf("Welcome to blog aggretator\n")
 	localConfig := config.Read()
 
-	db, err := sql.Open("postgres", localConfig.Db_url)
+	db, err := sql.Open("postgres", localConfig.DatabaseURL())
 	if err != nil {
+		os.Exit(1)
+	}
+	defer db.Close()
+
+	pingCtx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	if err := db.PingContext(pingCtx); err != nil {
+		fmt.Printf("database connection failed: %v\n", err)
 		os.Exit(1)
 	}
 
@@ -24,13 +34,14 @@ func main() {
 
 	localState := commands.State{
 		MyConfig: &localConfig,
-		Db : dbQueries,
+		Db:       dbQueries,
 	}
 
 	allCommands := commands.Commands{
 		Map: make(map[string]func(*commands.State, commands.Command) error),
 	}
 	allCommands.Register("login", commands.HandlerLogin)
+	allCommands.Register("register", commands.HandlerRegister)
 
 	if len(os.Args) < 2 {
 		fmt.Printf("Error, less than 2 arguments given\n")

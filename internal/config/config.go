@@ -1,16 +1,29 @@
 package config
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"os"
+	"time"
+
+	"github.com/duc-huy-ly/aggregator/internal/database"
+	"github.com/google/uuid"
 )
 
 const FILENAME string = ".gatorconfig.json"
 
 type Config struct {
-	Db_url            string
-	Current_user_name string
+	Db_url            string `json:"Db_url,omitempty"`
+	ConnectionString  string `json:"Connection_string,omitempty"`
+	Current_user_name string `json:"Current_user_name,omitempty"`
+}
+
+func (c Config) DatabaseURL() string {
+	if c.ConnectionString != "" {
+		return c.ConnectionString
+	}
+	return c.Db_url
 }
 
 func Read() Config {
@@ -66,5 +79,23 @@ func getConfigFilePath() (string, error) {
 		return "", err
 	}
 	return home + "/" + FILENAME, nil
+
+}
+
+func (c *Config) RegisterUser(name string, db *database.Queries) (database.User, error) {
+	newUserParams := database.CreateUserParams{
+		ID:        uuid.New(),
+		CreatedAt: time.Now(),
+		UpdatedAt: time.Now(),
+		Name:      name,
+	}
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	newUser, err := db.CreateUser(ctx, newUserParams)
+	if err != nil {
+		return database.User{}, fmt.Errorf("create user: %w", err)
+	}
+	return newUser, nil
 
 }

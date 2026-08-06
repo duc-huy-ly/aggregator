@@ -97,5 +97,8 @@ func (c *Config) RegisterUser(name string, db *database.Queries) (database.User,
 		return database.User{}, fmt.Errorf("create user: %w", err)
 	}
 	return newUser, nil
+}
 
+func (c *Config) ResetDatabase ( db *database.Queries) error {
+	return db.Reset(context.Background())
 }

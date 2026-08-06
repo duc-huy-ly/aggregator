@@ -65,3 +65,6 @@ func HandlerRegister(s *State, cmd Command) error {
 	return s.MyConfig.SetUser(newUser.Name)
 }
 
+func HandlerReset(s *State, cmd Command) error {
+	return s.MyConfig.ResetDatabase(s.Db)
+}

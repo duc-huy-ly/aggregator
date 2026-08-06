@@ -42,6 +42,7 @@ func main() {
 	}
 	allCommands.Register("login", commands.HandlerLogin)
 	allCommands.Register("register", commands.HandlerRegister)
+	allCommands.Register("reset", commands.HandlerReset)
 
 	if len(os.Args) < 2 {
 		fmt.Printf("Error, less than 2 arguments given\n")
@@ -53,8 +54,6 @@ func main() {
 		Name: args[0],
 		Args: args[1:],
 	}
-	fmt.Println(args[0])
-	fmt.Println(args[1:])
 	err = allCommands.Run(&localState, myCommand)
 	if err != nil {
 		os.Exit(1)

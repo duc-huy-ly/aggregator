@@ -4,10 +4,12 @@ import (
 	"fmt"
 
 	"github.com/duc-huy-ly/aggregator/internal/config"
+	"github.com/duc-huy-ly/aggregator/internal/database"
 )
 
 type State struct {
 	MyConfig *config.Config
+	Db *database.Queries
 }
 
 type Command struct {

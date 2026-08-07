@@ -68,3 +68,18 @@ func HandlerRegister(s *State, cmd Command) error {
 func HandlerReset(s *State, cmd Command) error {
 	return s.MyConfig.ResetDatabase(s.Db)
 }
+
+func HandlerGetUsers( s *State, cmd Command) error {
+	listOfUsers, err := s.MyConfig.GetUsers(s.Db)
+	if err != nil {
+		return fmt.Errorf("%v\n", err)
+	}
+	for _, user := range listOfUsers {
+		fmt.Printf("* %v", user.Name)
+		if user.Name == s.MyConfig.Current_user_name {
+			fmt.Printf(" (current)")
+		}
+		fmt.Printf("\n")
+	}
+	return nil
+}

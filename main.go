@@ -43,7 +43,7 @@ func main() {
 	allCommands.Register("login", commands.HandlerLogin)
 	allCommands.Register("register", commands.HandlerRegister)
 	allCommands.Register("reset", commands.HandlerReset)
-
+	allCommands.Register("users", commands.HandlerGetUsers)
 	if len(os.Args) < 2 {
 		fmt.Printf("Error, less than 2 arguments given\n")
 		os.Exit(1)

@@ -102,3 +102,7 @@ func (c *Config) RegisterUser(name string, db *database.Queries) (database.User,
 func (c *Config) ResetDatabase ( db *database.Queries) error {
 	return db.Reset(context.Background())
 }
+
+func (c *Config) GetUsers (db *database.Queries) ([]database.User, error) {
+	return db.GetUsers(context.Background())
+}

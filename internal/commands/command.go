@@ -39,7 +39,7 @@ func (commands *Commands) Register(name string, f func(*State, Command) error) {
 	commands.Map[name] = f
 }
 
-func CommandLogin(s *State, cmd Command) error {
+func HandlerLogin(s *State, cmd Command) error {
 	if len(cmd.Args) == 0 {
 		return fmt.Errorf("commands argument is empty\n")
 	}
@@ -53,7 +53,7 @@ func CommandLogin(s *State, cmd Command) error {
 	return s.MyConfig.SetUser(cmd.Args[0])
 }
 
-func CommandRegister(s *State, cmd Command) error {
+func HandlerRegister(s *State, cmd Command) error {
 	if len(cmd.Args) == 0 {
 		return fmt.Errorf("No argument given")
 	}
@@ -66,11 +66,11 @@ func CommandRegister(s *State, cmd Command) error {
 	return s.MyConfig.SetUser(newUser.Name)
 }
 
-func CommandReset(s *State, cmd Command) error {
+func HandlerReset(s *State, cmd Command) error {
 	return s.MyConfig.ResetDatabase(s.Db)
 }
 
-func CommandGetUsers(s *State, cmd Command) error {
+func HandlerGetUsers(s *State, cmd Command) error {
 	listOfUsers, err := s.MyConfig.GetUsers(s.Db)
 	if err != nil {
 		return fmt.Errorf("%v\n", err)
@@ -85,12 +85,12 @@ func CommandGetUsers(s *State, cmd Command) error {
 	return nil
 }
 
-func CommandAggDefault(s *State, cmd Command) error {
+func HandlerAggregateDefault(s *State, cmd Command) error {
 	return s.MyConfig.Aggregate("https://www.wagslane.dev/index.xml")
 }
 
-func CommandAddFeed(s *State, cmd Command) error {
-	if len(cmd.Args) <2 {
+func HandlerAddFeed(s *State, cmd Command) error {
+	if len(cmd.Args) < 2 {
 		return fmt.Errorf("AddFeed(name string, url string)")
 	}
 	return s.MyConfig.AddFeed(cmd.Args[0], cmd.Args[1], s.Db)

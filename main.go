@@ -60,10 +60,10 @@ func main() {
 }
 
 func addCommands(commandsList commands.Commands) {
-	commandsList.Register("login", commands.CommandLogin)
-	commandsList.Register("register", commands.CommandRegister)
-	commandsList.Register("reset", commands.CommandReset)
-	commandsList.Register("users", commands.CommandGetUsers)
-	commandsList.Register("agg", commands.CommandAggDefault)
-	commandsList.Register("addfeed", commands.CommandAddFeed)
+	commandsList.Register("login", commands.HandlerLogin)
+	commandsList.Register("register", commands.HandlerRegister)
+	commandsList.Register("reset", commands.HandlerReset)
+	commandsList.Register("users", commands.HandlerGetUsers)
+	commandsList.Register("agg", commands.HandlerAggregateDefault)
+	commandsList.Register("addfeed", commands.HandlerAddFeed)
 }

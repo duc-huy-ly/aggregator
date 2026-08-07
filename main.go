@@ -40,10 +40,9 @@ func main() {
 	allCommands := commands.Commands{
 		Map: make(map[string]func(*commands.State, commands.Command) error),
 	}
-	allCommands.Register("login", commands.HandlerLogin)
-	allCommands.Register("register", commands.HandlerRegister)
-	allCommands.Register("reset", commands.HandlerReset)
-	allCommands.Register("users", commands.HandlerGetUsers)
+
+	addCommands(allCommands)
+
 	if len(os.Args) < 2 {
 		fmt.Printf("Error, less than 2 arguments given\n")
 		os.Exit(1)
@@ -58,4 +57,12 @@ func main() {
 	if err != nil {
 		os.Exit(1)
 	}
+}
+
+func addCommands(commandsList commands.Commands) {
+	commandsList.Register("login", commands.CommandLogin)
+	commandsList.Register("register", commands.CommandRegister)
+	commandsList.Register("reset", commands.CommandReset)
+	commandsList.Register("users", commands.CommandGetUsers)
+	commandsList.Register("agg", commands.CommandAggDefault)
 }

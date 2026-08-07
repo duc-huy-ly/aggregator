@@ -10,7 +10,7 @@ import (
 
 type State struct {
 	MyConfig *config.Config
-	Db *database.Queries
+	Db       *database.Queries
 }
 
 type Command struct {
@@ -34,11 +34,11 @@ func (commands *Commands) Run(s *State, cmd Command) error {
 	return fn(s, cmd)
 }
 
-func (commands *Commands) Register (name string, f func(*State, Command) error){
+func (commands *Commands) Register(name string, f func(*State, Command) error) {
 	commands.Map[name] = f
 }
 
-func HandlerLogin(s *State, cmd Command) error {
+func CommandLogin(s *State, cmd Command) error {
 	if len(cmd.Args) == 0 {
 		return fmt.Errorf("commands argument is empty\n")
 	}
@@ -47,14 +47,14 @@ func HandlerLogin(s *State, cmd Command) error {
 	if err != nil {
 		return fmt.Errorf("Something went wrong getting the user")
 	}
-	
+
 	fmt.Println("User has been set")
 	return s.MyConfig.SetUser(cmd.Args[0])
 }
 
-func HandlerRegister(s *State, cmd Command) error {
+func CommandRegister(s *State, cmd Command) error {
 	if len(cmd.Args) == 0 {
-		return  fmt.Errorf("No argument given")
+		return fmt.Errorf("No argument given")
 	}
 	fmt.Printf("Register function called for %v\n", cmd.Args[0])
 	newUser, err := s.MyConfig.RegisterUser(cmd.Args[0], s.Db)
@@ -65,11 +65,11 @@ func HandlerRegister(s *State, cmd Command) error {
 	return s.MyConfig.SetUser(newUser.Name)
 }
 
-func HandlerReset(s *State, cmd Command) error {
+func CommandReset(s *State, cmd Command) error {
 	return s.MyConfig.ResetDatabase(s.Db)
 }
 
-func HandlerGetUsers( s *State, cmd Command) error {
+func CommandGetUsers(s *State, cmd Command) error {
 	listOfUsers, err := s.MyConfig.GetUsers(s.Db)
 	if err != nil {
 		return fmt.Errorf("%v\n", err)
@@ -82,4 +82,8 @@ func HandlerGetUsers( s *State, cmd Command) error {
 		fmt.Printf("\n")
 	}
 	return nil
+}
+
+func CommandAggDefault(s *State, cmd Command) error {
+	return s.MyConfig.Aggregate("https://www.wagslane.dev/index.xml")
 }

@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/duc-huy-ly/aggregator/internal/database"
+	"github.com/duc-huy-ly/aggregator/internal/rss"
 	"github.com/google/uuid"
 )
 
@@ -105,4 +106,13 @@ func (c *Config) ResetDatabase ( db *database.Queries) error {
 
 func (c *Config) GetUsers (db *database.Queries) ([]database.User, error) {
 	return db.GetUsers(context.Background())
+}
+
+func (c *Config) Aggregate(url string) error {
+	feed, err := rss.FetchFeed(context.Background(), url)
+	if err != nil {
+		return err
+	}
+	fmt.Printf("%v\n", feed)
+	return nil
 }

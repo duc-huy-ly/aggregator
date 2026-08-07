@@ -28,6 +28,7 @@ func (commands *Commands) Run(s *State, cmd Command) error {
 	}
 	fn, ok := commands.Map[cmd.Name]
 	if !ok {
+		fmt.Printf("Unknown action : %s\n", cmd.Name)
 		return fmt.Errorf("Unknown action : %s\n", cmd.Name)
 	}
 
@@ -86,4 +87,11 @@ func CommandGetUsers(s *State, cmd Command) error {
 
 func CommandAggDefault(s *State, cmd Command) error {
 	return s.MyConfig.Aggregate("https://www.wagslane.dev/index.xml")
+}
+
+func CommandAddFeed(s *State, cmd Command) error {
+	if len(cmd.Args) <2 {
+		return fmt.Errorf("AddFeed(name string, url string)")
+	}
+	return s.MyConfig.AddFeed(cmd.Args[0], cmd.Args[1], s.Db)
 }

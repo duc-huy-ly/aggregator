@@ -14,7 +14,6 @@ import (
 )
 
 func main() {
-	fmt.Printf("Welcome to blog aggretator\n")
 	localConfig := config.Read()
 
 	db, err := sql.Open("postgres", localConfig.DatabaseURL())
@@ -55,6 +54,7 @@ func main() {
 	}
 	err = allCommands.Run(&localState, myCommand)
 	if err != nil {
+		fmt.Printf("Error : %v\n", err)
 		os.Exit(1)
 	}
 }
@@ -65,4 +65,5 @@ func addCommands(commandsList commands.Commands) {
 	commandsList.Register("reset", commands.CommandReset)
 	commandsList.Register("users", commands.CommandGetUsers)
 	commandsList.Register("agg", commands.CommandAggDefault)
+	commandsList.Register("addfeed", commands.CommandAddFeed)
 }

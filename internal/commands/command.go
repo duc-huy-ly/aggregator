@@ -132,3 +132,23 @@ func HandlerFollow(s *State, cmd Command)error {
 	return  nil
 
 }
+
+func HandlerFollowing(s *State, cmd Command) error {
+	if len(cmd.Args) == 0 {
+		return fmt.Errorf("Error : following command requires 1 argument, the name of the given user")
+	}
+	userName := cmd.Args[0]
+	selectedUser, err:= s.Db.GetUser(context.Background(), userName)
+	if err != nil {
+		return fmt.Errorf("error fetching the user : %v\n")
+	}
+	feedsOfuser, err := s.Db.GetFeedFollowsForUser(context.Background(), selectedUser.ID)
+	if err != nil {
+		return fmt.Errorf("Error fetching the feeds of user %v : %v\n", userName, err)
+	}
+	for i, v := range feedsOfuser {
+		fmt.Printf("Feed #%v : '%v'\n", i + 1, v.FeedName)
+	}
+	
+	return nil
+}

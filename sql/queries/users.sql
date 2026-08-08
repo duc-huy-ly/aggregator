@@ -20,3 +20,4 @@ SELECT * FROM users;
 -- name: GetFeedPlusUser :many
 SELECT  feeds.name, feeds.url, users.name AS creator_name FROM feeds 
 JOIN users ON feeds.user_id = users.id; 
+

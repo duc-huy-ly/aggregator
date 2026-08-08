@@ -67,4 +67,5 @@ func addCommands(commandsList commands.Commands) {
 	commandsList.Register("agg", commands.HandlerAggregateDefault)
 	commandsList.Register("addfeed", commands.HandlerAddFeed)
 	commandsList.Register("feeds", commands.HandlerDisplayFeeds)
+	commandsList.Register("follow", commands.HandlerFollow)
 }

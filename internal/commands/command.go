@@ -3,9 +3,11 @@ package commands
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"github.com/duc-huy-ly/aggregator/internal/config"
 	"github.com/duc-huy-ly/aggregator/internal/database"
+	"github.com/google/uuid"
 )
 
 type State struct {
@@ -98,5 +100,35 @@ func HandlerAddFeed(s *State, cmd Command) error {
 
 func HandlerDisplayFeeds(s *State, cmd Command) error {
 	return s.MyConfig.DisplayFeeds(s.Db)
-	return nil 
+}
+
+func HandlerFollow(s *State, cmd Command)error {
+	if len(cmd.Args) == 0 {
+		return fmt.Errorf("Follow requires one argument")
+	}
+	url := cmd.Args[0]
+	feed, err := s.Db.GetFeedFromUrl(context.Background(), url)
+	if err != nil {
+		return fmt.Errorf("GetFeedFromUrl error : %v\n", err)
+	}
+
+	currentUser, err := s.Db.GetUser(context.Background(), s.MyConfig.Current_user_name)
+	if err != nil {
+		return fmt.Errorf("Error fetching user ID : %v\n", err)
+	}
+
+	feedFollowParams := database.CreateFeedFollowParams{
+		ID: uuid.New(),
+		CreatedAt: time.Now(),
+		UpdatedAt: time.Now(),
+		UserID: currentUser.ID,
+		FeedID: feed.ID,
+	}
+	feedFollow, err:= s.Db.CreateFeedFollow(context.Background(), feedFollowParams)
+	if err != nil {
+		return fmt.Errorf("CreateFeedFollow error : %v\n", err)
+	}
+	fmt.Printf("Feed name: %v\nUser: %v\n", feedFollow.FeedName, feedFollow.UserName)
+	return  nil
+
 }

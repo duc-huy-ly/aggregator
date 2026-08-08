@@ -91,12 +91,7 @@ func HandlerAggregateDefault(s *State, cmd Command) error {
 	return s.MyConfig.Aggregate("https://www.wagslane.dev/index.xml")
 }
 
-func HandlerAddFeed(s *State, cmd Command) error {
-	if len(cmd.Args) < 2 {
-		return fmt.Errorf("AddFeed(name string, url string)")
-	}
-	return s.MyConfig.AddFeed(cmd.Args[1], cmd.Args[0], s.Db)
-}
+
 
 func HandlerDisplayFeeds(s *State, cmd Command) error {
 	return s.MyConfig.DisplayFeeds(s.Db)
@@ -107,6 +102,7 @@ func HandlerFollow(s *State, cmd Command)error {
 		return fmt.Errorf("Follow requires one argument")
 	}
 	url := cmd.Args[0]
+
 	feed, err := s.Db.GetFeedFromUrl(context.Background(), url)
 	if err != nil {
 		return fmt.Errorf("GetFeedFromUrl error : %v\n", err)
@@ -124,6 +120,7 @@ func HandlerFollow(s *State, cmd Command)error {
 		UserID: currentUser.ID,
 		FeedID: feed.ID,
 	}
+
 	feedFollow, err:= s.Db.CreateFeedFollow(context.Background(), feedFollowParams)
 	if err != nil {
 		return fmt.Errorf("CreateFeedFollow error : %v\n", err)
@@ -134,10 +131,7 @@ func HandlerFollow(s *State, cmd Command)error {
 }
 
 func HandlerFollowing(s *State, cmd Command) error {
-	if len(cmd.Args) == 0 {
-		return fmt.Errorf("Error : following command requires 1 argument, the name of the given user")
-	}
-	userName := cmd.Args[0]
+	userName := s.MyConfig.Current_user_name
 	selectedUser, err:= s.Db.GetUser(context.Background(), userName)
 	if err != nil {
 		return fmt.Errorf("error fetching the user : %v\n")

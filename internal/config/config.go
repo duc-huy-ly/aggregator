@@ -117,31 +117,6 @@ func (c *Config) Aggregate(url string) error {
 	return nil
 }
 
-func (c *Config) AddFeed(url string, name string, db *database.Queries) error {
-	if url == "" || name == "" {
-		return fmt.Errorf("config.AddFeed(): Arguments must not be null")
-	}
-	currentUser, err := db.GetUser(context.Background(), c.Current_user_name)
-	if err != nil {
-		return err
-	}
-	newFeedParams := database.CreateFeedParams{
-		ID:uuid.New(),
-		CreatedAt: time.Now(),
-		UpdatedAt: time.Now(),
-		Name: name,
-		Url: url,
-		UserID: currentUser.ID,
-	}
-	feed, err := db.CreateFeed(context.Background(), newFeedParams)	
-	if err != nil {
-		return err
-	}
-
-	fmt.Printf("ID : %v\nName : %v\nCreated at : %v\nUpdated at : %v\nURL : %v\nUserID : %v\n", feed.ID, feed.Name, feed.CreatedAt, feed.UpdatedAt, feed.Url, feed.UserID)
-	return nil
-}
-
 func (c *Config) DisplayFeeds(db *database.Queries) error {
 	data, err := db.GetFeedPlusUser(context.Background())
 	if err != nil {

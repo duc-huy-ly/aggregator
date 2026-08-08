@@ -1,8 +1,19 @@
-# Connection to the database
+# Connection to the *gator* database
 
-in a terminal, type  `psql "postgres://postgres:@localhost:5432/gator" 
-passw : 'postgres"
+```
+psql "postgres://postgres:@localhost:5432/gator"
+```
+passw : `postgres`
 
 # Running up migration 
+From  `sql/schema` directory :
 
-'goose postgres "postgres://postgres:postgres@localhost:5432/gator" up'
+```
+goose postgres "postgres://postgres:postgres@localhost:5432/gator" up
+```
+
+# Connecting to the server
+
+```
+sudo -u postgres psql
+```

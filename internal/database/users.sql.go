@@ -47,6 +47,40 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 	return i, err
 }
 
+const getFeedPlusUser = `-- name: GetFeedPlusUser :many
+SELECT  feeds.name, feeds.url, users.name AS creator_name FROM feeds 
+JOIN users ON feeds.user_id = users.id
+`
+
+type GetFeedPlusUserRow struct {
+	Name        string
+	Url         string
+	CreatorName string
+}
+
+func (q *Queries) GetFeedPlusUser(ctx context.Context) ([]GetFeedPlusUserRow, error) {
+	rows, err := q.db.QueryContext(ctx, getFeedPlusUser)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetFeedPlusUserRow
+	for rows.Next() {
+		var i GetFeedPlusUserRow
+		if err := rows.Scan(&i.Name, &i.Url, &i.CreatorName); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getUser = `-- name: GetUser :one
 SELECT id, created_at, updated_at, name FROM users WHERE name = $1
 `

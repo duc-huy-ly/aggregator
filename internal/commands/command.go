@@ -93,5 +93,10 @@ func HandlerAddFeed(s *State, cmd Command) error {
 	if len(cmd.Args) < 2 {
 		return fmt.Errorf("AddFeed(name string, url string)")
 	}
-	return s.MyConfig.AddFeed(cmd.Args[0], cmd.Args[1], s.Db)
+	return s.MyConfig.AddFeed(cmd.Args[1], cmd.Args[0], s.Db)
+}
+
+func HandlerDisplayFeeds(s *State, cmd Command) error {
+	return s.MyConfig.DisplayFeeds(s.Db)
+	return nil 
 }

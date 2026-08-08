@@ -141,3 +141,14 @@ func (c *Config) AddFeed(url string, name string, db *database.Queries) error {
 	fmt.Printf("ID : %v\nName : %v\nCreated at : %v\nUpdated at : %v\nURL : %v\nUserID : %v\n", feed.ID, feed.Name, feed.CreatedAt, feed.UpdatedAt, feed.Url, feed.UserID)
 	return nil
 }
+
+func (c *Config) DisplayFeeds(db *database.Queries) error {
+	data, err := db.GetFeedPlusUser(context.Background())
+	if err != nil {
+		return err
+	}
+	for _, v := range data {
+		fmt.Printf("Name : %v\nURL : %v\nCreator : %v\n\n", v.Name, v.Url, v.CreatorName)	
+	}
+	return  nil
+}

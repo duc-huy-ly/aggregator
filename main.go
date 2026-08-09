@@ -69,6 +69,7 @@ func addCommands(commandsList commands.Commands) {
 	commandsList.Register("feeds", commands.HandlerDisplayFeeds)
 	commandsList.Register("follow", middlewareLoggedIn(commands.HandlerFollow))
 	commandsList.Register("following", middlewareLoggedIn(commands.HandlerFollowing))
+	commandsList.Register("unfollow", middlewareLoggedIn(commands.HandlerUnfollow))
 }
 
 func middlewareLoggedIn(handler func (s *commands.State, cmd commands.Command, user database.User) error) func (*commands.State, commands.Command) error {

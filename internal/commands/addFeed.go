@@ -9,21 +9,14 @@ import (
 	"github.com/google/uuid"
 )
 
-func HandlerAddFeed(s *State, cmd Command) error {
+func HandlerAddFeed(s *State, cmd Command, currentUser database.User ) error {
 	if len(cmd.Args) < 2 {
 		return fmt.Errorf("AddFeed(name string, url string)")
 	}
-	return AddFeed(cmd.Args[1], cmd.Args[0], s.MyConfig.Current_user_name, s.Db)
-}
+	name := cmd.Args[0]
+	url := cmd.Args[1]
+	db := s.Db
 
-func AddFeed(url string, name string, currentUsername string, db *database.Queries) error {
-	if url == "" || name == "" {
-		return fmt.Errorf("config.AddFeed(): Arguments must not be null")
-	}
-	currentUser, err := db.GetUser(context.Background(), currentUsername )
-	if err != nil {
-		return err
-	}
 	newFeedParams := database.CreateFeedParams{
 		ID:uuid.New(),
 		CreatedAt: time.Now(),
@@ -32,6 +25,7 @@ func AddFeed(url string, name string, currentUsername string, db *database.Queri
 		Url: url,
 		UserID: currentUser.ID,
 	}
+
 	feed, err := db.CreateFeed(context.Background(), newFeedParams)	
 	if err != nil {
 		return err

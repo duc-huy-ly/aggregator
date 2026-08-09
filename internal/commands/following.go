@@ -15,8 +15,8 @@ func HandlerFollowing(s *State, cmd Command, user database.User) error {
 		return fmt.Errorf("Error fetching the feeds of user %v : %v\n", userName, err)
 	}
 	for i, v := range feedsOfuser {
-		fmt.Printf("Feed #%v : '%v'\n", i + 1, v.FeedName)
+		fmt.Printf("Feed #%v : '%v'\n", i+1, v.FeedName)
 	}
-	
+
 	return nil
 }

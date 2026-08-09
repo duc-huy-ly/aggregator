@@ -9,7 +9,7 @@ import (
 	"github.com/google/uuid"
 )
 
-func HandlerFollow(s *State, cmd Command, currentUser database.User )error {
+func HandlerFollow(s *State, cmd Command, currentUser database.User) error {
 	if len(cmd.Args) == 0 {
 		return fmt.Errorf("Follow requires one argument")
 	}
@@ -21,18 +21,18 @@ func HandlerFollow(s *State, cmd Command, currentUser database.User )error {
 	}
 
 	feedFollowParams := database.CreateFeedFollowParams{
-		ID: uuid.New(),
+		ID:        uuid.New(),
 		CreatedAt: time.Now(),
 		UpdatedAt: time.Now(),
-		UserID: currentUser.ID,
-		FeedID: feed.ID,
+		UserID:    currentUser.ID,
+		FeedID:    feed.ID,
 	}
 
-	feedFollow, err:= s.Db.CreateFeedFollow(context.Background(), feedFollowParams)
+	feedFollow, err := s.Db.CreateFeedFollow(context.Background(), feedFollowParams)
 	if err != nil {
 		return fmt.Errorf("CreateFeedFollow error : %v\n", err)
 	}
 	fmt.Printf("Feed name: %v\nUser: %v\n", feedFollow.FeedName, feedFollow.UserName)
-	return  nil
+	return nil
 
 }

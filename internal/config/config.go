@@ -100,11 +100,11 @@ func (c *Config) RegisterUser(name string, db *database.Queries) (database.User,
 	return newUser, nil
 }
 
-func (c *Config) ResetDatabase ( db *database.Queries) error {
+func (c *Config) ResetDatabase(db *database.Queries) error {
 	return db.Reset(context.Background())
 }
 
-func (c *Config) GetUsers (db *database.Queries) ([]database.User, error) {
+func (c *Config) GetUsers(db *database.Queries) ([]database.User, error) {
 	return db.GetUsers(context.Background())
 }
 
@@ -123,7 +123,7 @@ func (c *Config) DisplayFeeds(db *database.Queries) error {
 		return err
 	}
 	for _, v := range data {
-		fmt.Printf("Name : %v\nURL : %v\nCreator : %v\n\n", v.Name, v.Url, v.CreatorName)	
+		fmt.Printf("Name : %v\nURL : %v\nCreator : %v\n\n", v.Name, v.Url, v.CreatorName)
 	}
-	return  nil
+	return nil
 }

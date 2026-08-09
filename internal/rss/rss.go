@@ -27,7 +27,7 @@ type RSSItem struct {
 }
 
 // Fetch a given URL, assuming nothing goes wrong, return a filled out RSSFeed struct
-func FetchFeed(ctx context.Context, feedURL string) (*RSSFeed, error){
+func FetchFeed(ctx context.Context, feedURL string) (*RSSFeed, error) {
 	feed := RSSFeed{}
 	if feedURL == "" {
 		return nil, fmt.Errorf("URL must not be empty")
@@ -40,7 +40,7 @@ func FetchFeed(ctx context.Context, feedURL string) (*RSSFeed, error){
 	myClient := &http.Client{
 		Timeout: 5 * time.Second,
 	}
-	myResponse, err := myClient.Do(getRequestFeedUrl)	
+	myResponse, err := myClient.Do(getRequestFeedUrl)
 	if err != nil {
 		return nil, fmt.Errorf("Error fetching the response : %v\n", err)
 	}
@@ -60,7 +60,6 @@ func FetchFeed(ctx context.Context, feedURL string) (*RSSFeed, error){
 		feed.Channel.Item[i].Title = html.UnescapeString(item.Title)
 		feed.Channel.Item[i].Description = html.UnescapeString(item.Description)
 	}
-
 
 	return &feed, nil
 

@@ -92,6 +92,3 @@ func HandlerAggregateDefault(s *State, cmd Command) error {
 func HandlerDisplayFeeds(s *State, cmd Command) error {
 	return s.MyConfig.DisplayFeeds(s.Db)
 }
-
-
-

@@ -9,7 +9,7 @@ import (
 	"github.com/google/uuid"
 )
 
-func HandlerAddFeed(s *State, cmd Command, currentUser database.User ) error {
+func HandlerAddFeed(s *State, cmd Command, currentUser database.User) error {
 	if len(cmd.Args) < 2 {
 		return fmt.Errorf("AddFeed(name string, url string)")
 	}
@@ -18,15 +18,15 @@ func HandlerAddFeed(s *State, cmd Command, currentUser database.User ) error {
 	db := s.Db
 
 	newFeedParams := database.CreateFeedParams{
-		ID:uuid.New(),
+		ID:        uuid.New(),
 		CreatedAt: time.Now(),
 		UpdatedAt: time.Now(),
-		Name: name,
-		Url: url,
-		UserID: currentUser.ID,
+		Name:      name,
+		Url:       url,
+		UserID:    currentUser.ID,
 	}
 
-	feed, err := db.CreateFeed(context.Background(), newFeedParams)	
+	feed, err := db.CreateFeed(context.Background(), newFeedParams)
 	if err != nil {
 		return err
 	}
@@ -35,13 +35,13 @@ func HandlerAddFeed(s *State, cmd Command, currentUser database.User ) error {
 
 	// create feed follow record
 	feedFollowParams := database.CreateFeedFollowParams{
-		ID: uuid.New(),
+		ID:        uuid.New(),
 		CreatedAt: time.Now(),
 		UpdatedAt: time.Now(),
-		UserID: currentUser.ID,
-		FeedID: feed.ID,
+		UserID:    currentUser.ID,
+		FeedID:    feed.ID,
 	}
-	_ , err = db.CreateFeedFollow(context.Background(), feedFollowParams)
+	_, err = db.CreateFeedFollow(context.Background(), feedFollowParams)
 	if err != nil {
 		return fmt.Errorf("Create feed follow error inside AddFeed : %v\n", err)
 	}

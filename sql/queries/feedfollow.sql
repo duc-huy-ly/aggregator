@@ -10,11 +10,11 @@ WITH inserted_feed_follow AS (
         )
     VALUES
         (
-            $ 1,
-            $ 2,
-            $ 3,
-            $ 4,
-            $ 5
+            $1,
+            $2,
+            $3,
+            $4,
+            $5
         ) RETURNING *
 )
 SELECT
@@ -33,7 +33,7 @@ WITH feeds_from_user AS (
     FROM
         feed_follows
     WHERE
-        feed_follows.user_id = $ 1
+        feed_follows.user_id = $1
 )
 SELECT
     feeds_from_user.*,
@@ -43,3 +43,6 @@ FROM
     feeds_from_user
     JOIN feeds ON feeds.id = feeds_from_user.feed_id
     JOIN users ON users.id = feeds_from_user.user_id;
+
+-- name: Remove :exec 
+DELETE FROM feed_follows WHERE user_id = $1  AND feed_id = $2 ;

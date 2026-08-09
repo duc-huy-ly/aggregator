@@ -9,7 +9,7 @@ INSERT INTO
         user_id
     )
 VALUES
-    ($ 1, $ 2, $ 3, $ 4, $ 5, $ 6) RETURNING *;
+    ($1, $2, $3, $4, $5, $6) RETURNING *;
 
 -- name: GetFeeds :many
 SELECT
@@ -23,4 +23,4 @@ SELECT
 FROM
     feeds
 WHERE
-    url = $ 1;
+    url = $1;

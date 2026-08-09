@@ -14,30 +14,31 @@ import (
 
 const createFeedFollow = `-- name: CreateFeedFollow :one
 WITH inserted_feed_follow AS (
-    INSERT INTO feed_follows (
-        id,
-        created_at, 
-        updated_at,
-        user_id,
-        feed_id
-    )
-    VALUES (
-        $1,
-        $2,
-        $3,
-        $4,
-        $5
-    )
-    RETURNING id, created_at, updated_at, user_id, feed_id
+    INSERT INTO
+        feed_follows (
+            id,
+            created_at,
+            updated_at,
+            user_id,
+            feed_id
+        )
+    VALUES
+        (
+            $1,
+            $2,
+            $3,
+            $4,
+            $5
+        ) RETURNING id, created_at, updated_at, user_id, feed_id
 )
-SELECT inserted_feed_follow.id, inserted_feed_follow.created_at, inserted_feed_follow.updated_at, inserted_feed_follow.user_id, inserted_feed_follow.feed_id,
-feeds.name AS feed_name,
-users.name AS user_name
-FROM inserted_feed_follow
-INNER JOIN feeds
-    ON feeds.id = inserted_feed_follow.feed_id
-INNER JOIN users
-    on users.id = inserted_feed_follow.user_id
+SELECT
+    inserted_feed_follow.id, inserted_feed_follow.created_at, inserted_feed_follow.updated_at, inserted_feed_follow.user_id, inserted_feed_follow.feed_id,
+    feeds.name AS feed_name,
+    users.name AS user_name
+FROM
+    inserted_feed_follow
+    INNER JOIN feeds ON feeds.id = inserted_feed_follow.feed_id
+    INNER JOIN users on users.id = inserted_feed_follow.user_id
 `
 
 type CreateFeedFollowParams struct {
@@ -81,16 +82,21 @@ func (q *Queries) CreateFeedFollow(ctx context.Context, arg CreateFeedFollowPara
 
 const getFeedFollowsForUser = `-- name: GetFeedFollowsForUser :many
 WITH feeds_from_user AS (
-    SELECT id, created_at, updated_at, user_id, feed_id FROM feed_follows WHERE feed_follows.user_id = $1
+    SELECT
+        id, created_at, updated_at, user_id, feed_id
+    FROM
+        feed_follows
+    WHERE
+        feed_follows.user_id = $1
 )
-SELECT feeds_from_user.id, feeds_from_user.created_at, feeds_from_user.updated_at, feeds_from_user.user_id, feeds_from_user.feed_id,
-feeds.name AS feed_name,
-users.name AS user_name 
-FROM feeds_from_user 
-JOIN feeds 
-    ON feeds.id = feeds_from_user.feed_id
-JOIN users
-    ON users.id = feeds_from_user.user_id
+SELECT
+    feeds_from_user.id, feeds_from_user.created_at, feeds_from_user.updated_at, feeds_from_user.user_id, feeds_from_user.feed_id,
+    feeds.name AS feed_name,
+    users.name AS user_name
+FROM
+    feeds_from_user
+    JOIN feeds ON feeds.id = feeds_from_user.feed_id
+    JOIN users ON users.id = feeds_from_user.user_id
 `
 
 type GetFeedFollowsForUserRow struct {
@@ -132,4 +138,18 @@ func (q *Queries) GetFeedFollowsForUser(ctx context.Context, userID uuid.UUID) (
 		return nil, err
 	}
 	return items, nil
+}
+
+const remove = `-- name: Remove :exec
+DELETE FROM feed_follows WHERE user_id = $1  AND feed_id = $2
+`
+
+type RemoveParams struct {
+	UserID uuid.UUID
+	FeedID uuid.UUID
+}
+
+func (q *Queries) Remove(ctx context.Context, arg RemoveParams) error {
+	_, err := q.db.ExecContext(ctx, remove, arg.UserID, arg.FeedID)
+	return err
 }

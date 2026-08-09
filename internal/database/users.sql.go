@@ -13,14 +13,10 @@ import (
 )
 
 const createUser = `-- name: CreateUser :one
-INSERT INTO users (id, created_at, updated_at, name)
-VALUES (
-    $1,
-    $2,
-    $3,
-    $4
-)
-RETURNING id, created_at, updated_at, name
+INSERT INTO
+    users (id, created_at, updated_at, name)
+VALUES
+    ($1, $2, $3, $4) RETURNING id, created_at, updated_at, name
 `
 
 type CreateUserParams struct {
@@ -48,8 +44,13 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 }
 
 const getFeedPlusUser = `-- name: GetFeedPlusUser :many
-SELECT  feeds.name, feeds.url, users.name AS creator_name FROM feeds 
-JOIN users ON feeds.user_id = users.id
+SELECT
+    feeds.name,
+    feeds.url,
+    users.name AS creator_name
+FROM
+    feeds
+    JOIN users ON feeds.user_id = users.id
 `
 
 type GetFeedPlusUserRow struct {
@@ -82,7 +83,12 @@ func (q *Queries) GetFeedPlusUser(ctx context.Context) ([]GetFeedPlusUserRow, er
 }
 
 const getUser = `-- name: GetUser :one
-SELECT id, created_at, updated_at, name FROM users WHERE name = $1
+SELECT
+    id, created_at, updated_at, name
+FROM
+    users
+WHERE
+    name = $1
 `
 
 func (q *Queries) GetUser(ctx context.Context, name string) (User, error) {
@@ -98,7 +104,10 @@ func (q *Queries) GetUser(ctx context.Context, name string) (User, error) {
 }
 
 const getUsers = `-- name: GetUsers :many
-SELECT id, created_at, updated_at, name FROM users
+SELECT
+    id, created_at, updated_at, name
+FROM
+    users
 `
 
 func (q *Queries) GetUsers(ctx context.Context) ([]User, error) {
@@ -130,7 +139,8 @@ func (q *Queries) GetUsers(ctx context.Context) ([]User, error) {
 }
 
 const reset = `-- name: Reset :exec
-DELETE FROM users
+DELETE FROM
+    users
 `
 
 func (q *Queries) Reset(ctx context.Context) error {

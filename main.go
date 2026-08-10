@@ -64,7 +64,7 @@ func addCommands(commandsList commands.Commands) {
 	commandsList.Register("register", commands.HandlerRegister)
 	commandsList.Register("reset", commands.HandlerReset)
 	commandsList.Register("users", commands.HandlerGetUsers)
-	commandsList.Register("agg", commands.HandlerAggregateDefault)
+	commandsList.Register("agg", commands.HandlerAggregate)
 	commandsList.Register("addfeed", middlewareLoggedIn(commands.HandlerAddFeed))
 	commandsList.Register("feeds", commands.HandlerDisplayFeeds)
 	commandsList.Register("follow", middlewareLoggedIn(commands.HandlerFollow))
@@ -72,9 +72,9 @@ func addCommands(commandsList commands.Commands) {
 	commandsList.Register("unfollow", middlewareLoggedIn(commands.HandlerUnfollow))
 }
 
-func middlewareLoggedIn(handler func (s *commands.State, cmd commands.Command, user database.User) error) func (*commands.State, commands.Command) error {
+func middlewareLoggedIn(handler func(s *commands.State, cmd commands.Command, user database.User) error) func(*commands.State, commands.Command) error {
 	return func(s *commands.State, cmd commands.Command) error {
-		user , err := s.Db.GetUser(context.Background(), s.MyConfig.Current_user_name)
+		user, err := s.Db.GetUser(context.Background(), s.MyConfig.Current_user_name)
 		if err != nil {
 			return err
 		}

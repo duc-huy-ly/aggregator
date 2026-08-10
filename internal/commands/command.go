@@ -85,10 +85,6 @@ func HandlerGetUsers(s *State, cmd Command) error {
 	return nil
 }
 
-func HandlerAggregateDefault(s *State, cmd Command) error {
-	return s.MyConfig.Aggregate("https://www.wagslane.dev/index.xml")
-}
-
 func HandlerDisplayFeeds(s *State, cmd Command) error {
 	return s.MyConfig.DisplayFeeds(s.Db)
 }

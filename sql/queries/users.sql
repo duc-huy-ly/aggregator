@@ -2,7 +2,7 @@
 INSERT INTO
     users (id, created_at, updated_at, name)
 VALUES
-    ($1, $2, $3, $4) RETURNING *;
+    ($1, NOW(), NOW(), $2) RETURNING *;
 
 -- name: GetUser :one
 SELECT

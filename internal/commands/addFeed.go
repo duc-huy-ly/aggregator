@@ -19,8 +19,6 @@ func HandlerAddFeed(s *State, cmd Command, currentUser database.User) error {
 
 	newFeedParams := database.CreateFeedParams{
 		ID:        uuid.New(),
-		CreatedAt: time.Now(),
-		UpdatedAt: time.Now(),
 		Name:      name,
 		Url:       url,
 		UserID:    currentUser.ID,

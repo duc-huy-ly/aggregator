@@ -85,8 +85,6 @@ func getConfigFilePath() (string, error) {
 func (c *Config) RegisterUser(name string, db *database.Queries) (database.User, error) {
 	newUserParams := database.CreateUserParams{
 		ID:        uuid.New(),
-		CreatedAt: time.Now(),
-		UpdatedAt: time.Now(),
 		Name:      name,
 	}
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)

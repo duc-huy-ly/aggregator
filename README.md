@@ -85,7 +85,7 @@ To add the executatble binary to the list of programs with go, run
 ` go install ` that will let you run it from anywhere as 
 
 ```
-gator [argument]
+Gator [argument]
 ```
 
 ## Commands
@@ -102,19 +102,24 @@ gator [argument]
 - `unfollow <url>`: stop following a feed by URL
 - `browse [limit]`: show recent posts for the current user, defaulting to 2
 
+## Usage
+
+- Register a user
+- Add some feeds
+- From a separate terminal, call the aggregate command and set a reasonable frequency (every 30min for instance)
+- Browse the articles using the `browse [arg]` command
+
 ## Examples
 
-From the `bin` directory : 
 ```bash
-./bin/agg register alice
-./bin/agg login alice
-./bin/agg addfeed "Hacker News" https://news.ycombinator.com/rss
-./bin/agg agg 5s
-./bin/agg browse 10
+Gator register alice
+Gator login alice
+Gator addfeed "Hacker News" https://news.ycombinator.com/rss
+Gator agg 30min
+Gator browse 10
 ```
 
 ## Notes
 
-- The config file is stored at `~/.gatorconfig.json`.
 - The aggregator command will skip duplicate posts when PostgreSQL returns unique-constraint error `23505`.
 - The browse command works with plain `int` values at the CLI boundary.

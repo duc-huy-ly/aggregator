@@ -3,6 +3,7 @@ package commands
 import (
 	"context"
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/duc-huy-ly/Gator/internal/database"
@@ -59,7 +60,12 @@ func HandlerAggregate(s *State, cmd Command) error {
 	if len(cmd.Args) == 0 {
 		return fmt.Errorf("Aggretate needs time_between_reqs")
 	}
-	frequency, err := time.ParseDuration(cmd.Args[0])
+	durationInput := strings.TrimSpace(strings.ToLower(cmd.Args[0]))
+	if strings.HasSuffix(durationInput, "min") {
+		durationInput = strings.TrimSuffix(durationInput, "min") + "m"
+	}
+
+	frequency, err := time.ParseDuration(durationInput)
 	if err != nil {
 		return fmt.Errorf("Error parsing time duration")
 	}

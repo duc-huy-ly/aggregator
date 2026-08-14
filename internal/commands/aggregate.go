@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/duc-huy-ly/aggregator/internal/database"
-	"github.com/duc-huy-ly/aggregator/internal/rss"
+	"github.com/duc-huy-ly/Gator/internal/database"
+	"github.com/duc-huy-ly/Gator/internal/rss"
 	"github.com/google/uuid"
 	"github.com/lib/pq"
 )

@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/duc-huy-ly/aggregator/internal/config"
-	"github.com/duc-huy-ly/aggregator/internal/database"
+	"github.com/duc-huy-ly/Gator/internal/config"
+	"github.com/duc-huy-ly/Gator/internal/database"
 )
 
 type State struct {

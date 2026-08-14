@@ -7,9 +7,9 @@ import (
 	"os"
 	"time"
 
-	"github.com/duc-huy-ly/aggregator/internal/commands"
-	"github.com/duc-huy-ly/aggregator/internal/config"
-	"github.com/duc-huy-ly/aggregator/internal/database"
+	"github.com/duc-huy-ly/Gator/internal/commands"
+	"github.com/duc-huy-ly/Gator/internal/config"
+	"github.com/duc-huy-ly/Gator/internal/database"
 	_ "github.com/lib/pq"
 )
 
